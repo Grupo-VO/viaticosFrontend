@@ -1,0 +1,138 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-road me-2 page-title-icon"></i>Rutas</h4>
+      <small class="text-muted">Rutas calculadas con Google Maps</small>
+    </div>
+    <button class="btn btn-green" id="btnNuevaRuta">
+      <i class="fas fa-plus me-1"></i> Nueva Ruta
+    </button>
+  </div>
+
+  <div class="table-search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="form-control" id="searchRutas" placeholder="Buscar por nombre u origen/destino...">
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Origen</th>
+            <th>Destino</th>
+            <th>Distancia</th>
+            <th>Duracion</th>
+            <th>Casetas</th>
+            <th>Estado</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableRutasBody">
+          <tr><td colspan="8"><div class="empty-state"><i class="fas fa-road"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="rutaModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="rutaModalTitle">Nueva Ruta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formRuta">
+          <input type="hidden" id="rutaId">
+          <div class="row g-3">
+             <div class="col-12">
+              <label class="form-label">Nombre <span class="text-danger">*</span></label>
+               <input type="text" class="form-control form-green" id="rutaNombre" required maxlength="100">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Origen <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="rutaOrigen" required></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Destino <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="rutaDestino" required></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Costo Comida <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="rutaCostoComida" min="0" step="0.01" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Costo Hospedaje <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="rutaCostoHospedaje" min="0" step="0.01" required>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="rutaUsaCasetas" checked>
+                <label class="form-check-label" for="rutaUsaCasetas">Usa Casetas</label>
+               </div>
+             </div>
+             <div class="col-12">
+               <label class="form-label">Trazos de la ruta</label>
+               <div class="map-container route-form-map" id="rutaFormMap">
+                 <div class="map-placeholder"><i class="fas fa-map"></i><span>Selecciona origen y destino para calcular la ruta</span></div>
+               </div>
+               <div id="rutaFormEditorHelp" class="alert alert-info small mt-2 mb-0">
+                 La ruta siempre será redonda: origen → destino → origen. Puedes arrastrar el trazo para ajustarlo.
+               </div>
+             </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarRuta">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver -->
+<div class="modal fade" id="rutaVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="verRutaTitulo">Detalle de Ruta</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="detail-grid mb-3">
+          <div class="detail-row"><span class="detail-label">Origen</span><span class="detail-value" id="verRutaOrigen"></span></div>
+          <div class="detail-row"><span class="detail-label">Destino</span><span class="detail-value" id="verRutaDestino"></span></div>
+          <div class="detail-row"><span class="detail-label">Distancia</span><span class="detail-value" id="verRutaDistancia"></span></div>
+          <div class="detail-row"><span class="detail-label">Duracion</span><span class="detail-value" id="verRutaDuracion"></span></div>
+          <div class="detail-row"><span class="detail-label">Costo Casetas</span><span class="detail-value" id="verRutaCasetas"></span></div>
+          <div class="detail-row"><span class="detail-label">Costo Comida</span><span class="detail-value" id="verRutaComida"></span></div>
+          <div class="detail-row"><span class="detail-label">Costo Hospedaje</span><span class="detail-value" id="verRutaHospedaje"></span></div>
+        </div>
+        <div class="modal-section-title">Casetas</div>
+        <div class="panel-card overflow-hidden">
+          <table class="table table-custom mb-0">
+            <thead><tr><th>#</th><th>Nombre</th><th>Costo</th></tr></thead>
+            <tbody id="verRutaCasetasBody"></tbody>
+          </table>
+        </div>
+          <div class="modal-section-title mt-3">Mapa</div>
+          <div class="map-container" id="rutaMap"><div class="map-placeholder"><i class="fas fa-map"></i><span>Cargando mapa...</span></div></div>
+          <div class="route-legend mt-2">
+            <span><i class="route-legend-line route-legend-outbound"></i> Ida</span>
+            <span><i class="route-legend-line route-legend-return"></i> Regreso</span>
+          </div>
+         <div id="rutaEditorHelp" class="alert alert-info small mt-2 d-none">
+           Arrastra la ruta para ajustar el recorrido. Guarda el trazo cuando termines.
+         </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+         <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

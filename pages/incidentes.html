@@ -1,0 +1,127 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-exclamation-triangle me-2 page-title-icon"></i>Incidentes</h4>
+      <small class="text-muted">Reporte de incidentes de viaje</small>
+    </div>
+    <button class="btn btn-green" id="btnNuevoIncidente">
+      <i class="fas fa-plus me-1"></i> Nuevo Incidente
+    </button>
+  </div>
+
+  <div class="table-search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="form-control" id="searchIncidentes" placeholder="Buscar por viaje, tipo, creador...">
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>Tipo</th>
+             <th>Severidad</th>
+             <th>Viaje</th>
+            <th>Descripcion</th>
+            <th>Fecha</th>
+            <th>Reporto</th>
+             <th>Evidencia</th>
+             <th>Estado</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableIncidentesBody">
+           <tr><td colspan="9"><div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear -->
+<div class="modal fade" id="incidenteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Nuevo Incidente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formIncidente">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Tipo <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="incTipo" required>
+                <option value="">Seleccionar...</option>
+                <option value="FALLA">Falla</option>
+                <option value="ACCIDENTE">Accidente</option>
+                <option value="MULTA">Multa</option>
+                <option value="DETALLE">Detalle</option>
+              </select>
+            </div>
+             <div class="col-md-6">
+               <label class="form-label">Viaje (opcional)</label>
+               <select class="form-select form-green" id="incViaje"></select>
+             </div>
+             <div class="col-md-6">
+               <label class="form-label">Severidad <span class="text-danger">*</span></label>
+               <select class="form-select form-green" id="incSeveridad" required>
+                 <option value="MEDIA">Media</option>
+                 <option value="BAJA">Baja</option>
+                 <option value="ALTA">Alta</option>
+                 <option value="CRITICA">Critica</option>
+               </select>
+             </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control form-green" id="incFecha" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Evidencia (opcional)</label>
+              <input type="file" class="form-control form-green" id="incEvidencia" accept="image/*,.pdf">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Descripcion <span class="text-danger">*</span></label>
+              <textarea class="form-control form-green" id="incDescripcion" rows="3" required maxlength="500"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarIncidente">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver -->
+<div class="modal fade" id="incidenteVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Detalle de Incidente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <div class="persona-foto-preview persona-foto-ver"><i class="fas fa-exclamation-triangle text-warning"></i></div>
+          <h5 class="fw-bold mb-1" id="verIncTipo"></h5>
+        </div>
+           <div class="detail-grid">
+             <div class="detail-row"><span class="detail-label">Viaje</span><span class="detail-value" id="verIncViaje"></span></div>
+             <div class="detail-row"><span class="detail-label">Severidad</span><span class="detail-value" id="verIncSeveridad"></span></div>
+             <div class="detail-row"><span class="detail-label">Estado</span><span class="detail-value" id="verIncEstado"></span></div>
+             <div class="detail-row"><span class="detail-label">Ubicacion</span><span class="detail-value" id="verIncUbicacion"></span></div>
+          <div class="detail-row"><span class="detail-label">Descripcion</span><span class="detail-value" id="verIncDescripcion"></span></div>
+          <div class="detail-row"><span class="detail-label">Fecha</span><span class="detail-value" id="verIncFecha"></span></div>
+          <div class="detail-row"><span class="detail-label">Reporto</span><span class="detail-value" id="verIncCreador"></span></div>
+          <div class="detail-row"><span class="detail-label">Evidencia</span><span class="detail-value"><a href="#" id="verIncEvidenciaLink"><i class="fas fa-file-download me-1"></i>Descargar</a></span></div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

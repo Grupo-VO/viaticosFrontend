@@ -1,0 +1,72 @@
+<div class="page-content home-page">
+  <div class="home-hero">
+    <img src="assets/imgs/logo.png" alt="Grupo VO" class="home-logo">
+    <h3>Hola, <span id="homeUserName">Usuario</span></h3>
+    <p class="text-muted">Bienvenido al sistema de Viáticos de Grupo VO. Selecciona un atajo para comenzar.</p>
+  </div>
+
+  <div class="home-grid">
+    <button type="button" class="home-shortcut" data-view="viajes" title="Gestion de viajes y viaticos">
+      <i class="fas fa-route"></i>
+      <span>Viajes</span>
+    </button>
+    <button type="button" class="home-shortcut" data-view="monitoreo" title="Viajes en tiempo real">
+      <i class="fas fa-satellite-dish"></i>
+      <span>Monitoreo</span>
+    </button>
+    <button type="button" class="home-shortcut" data-view="combustible" title="Cargas de combustible">
+      <i class="fas fa-gas-pump"></i>
+      <span>Combustible</span>
+    </button>
+    <button type="button" class="home-shortcut" data-view="mantenimientos" title="Mantenimientos de vehiculos">
+      <i class="fas fa-wrench"></i>
+      <span>Mantenimientos</span>
+    </button>
+    <button type="button" class="home-shortcut" data-view="incidentes" title="Reporte de incidentes">
+      <i class="fas fa-exclamation-triangle"></i>
+      <span>Incidentes</span>
+    </button>
+    <button type="button" class="home-shortcut home-shortcut-admin" data-view="vehiculos" title="Administracion de vehiculos">
+      <i class="fas fa-truck"></i>
+      <span>Vehiculos</span>
+    </button>
+    <button type="button" class="home-shortcut home-shortcut-admin" data-view="personas" title="Administracion del personal">
+      <i class="fas fa-users"></i>
+      <span>Personal</span>
+    </button>
+    <button type="button" class="home-shortcut home-shortcut-admin" data-view="destinos" title="Destinos">
+      <i class="fas fa-map-marker-alt"></i>
+      <span>Destinos</span>
+    </button>
+    <button type="button" class="home-shortcut home-shortcut-admin" data-view="rutas" title="Rutas y casetas">
+      <i class="fas fa-road"></i>
+      <span>Rutas</span>
+    </button>
+    <button type="button" class="home-shortcut home-shortcut-admin" data-view="configuracion" title="Parametros del sistema">
+      <i class="fas fa-cog"></i>
+      <span>Configuracion</span>
+    </button>
+  </div>
+</div>
+
+<script>
+  (function () {
+    var nombre = localStorage.getItem('nombre') || 'Usuario';
+    var el = document.getElementById('homeUserName');
+    if (el) el.textContent = nombre;
+
+    var rol = (typeof Dashboard !== 'undefined' && Dashboard.getRol) ? Dashboard.getRol() : null;
+
+    document.querySelectorAll('.home-shortcut-admin').forEach(function (btn) {
+      if (rol !== 'ADMINISTRADOR') btn.style.display = 'none';
+    });
+
+    document.querySelectorAll('.home-shortcut').forEach(function (btn) {
+      btn.addEventListener('click', function () {
+        var view = btn.dataset.view;
+        var item = document.querySelector('#sidebar-nav .sidebar-item[data-module="' + view + '"]');
+        if (item) item.click();
+      });
+    });
+  })();
+</script>

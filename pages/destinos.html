@@ -1,0 +1,109 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-map-marker-alt me-2 page-title-icon"></i>Destinos</h4>
+      <small class="text-muted">Puntos de origen y arribo</small>
+    </div>
+    <button class="btn btn-green" id="btnNuevoDestino">
+      <i class="fas fa-plus me-1"></i> Nuevo Destino
+    </button>
+  </div>
+
+  <div class="table-search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="form-control" id="searchDestinos" placeholder="Buscar por nombre o direccion...">
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>Nombre</th>
+            <th>Direccion</th>
+            <th>Latitud</th>
+            <th>Longitud</th>
+            <th>Estado</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableDestinosBody">
+          <tr><td colspan="6"><div class="empty-state"><i class="fas fa-map-marker-alt"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="destinoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="destinoModalTitle">Nuevo Destino</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formDestino">
+          <input type="hidden" id="destinoId">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Nombre <span class="text-danger">*</span></label>
+               <input type="text" class="form-control form-green" id="destinoNombre" required maxlength="70">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Direccion <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="destinoDireccion" required maxlength="200">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Latitud <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="destinoLatitud" step="0.0000001" min="-90" max="90" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Longitud <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="destinoLongitud" step="0.0000001" min="-180" max="180" required>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="destinoActivo" checked>
+                <label class="form-check-label" for="destinoActivo">Activo</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarDestino">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver -->
+<div class="modal fade" id="destinoVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Detalle de Destino</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <div class="persona-foto-preview persona-foto-ver"><i class="fas fa-map-marker-alt"></i></div>
+          <h5 class="fw-bold mb-1" id="verDestinoNombre"></h5>
+          <span class="badge-status" id="verDestinoEstado"></span>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-row"><span class="detail-label">Direccion</span><span class="detail-value" id="verDestinoDireccion"></span></div>
+          <div class="detail-row"><span class="detail-label">Latitud</span><span class="detail-value" id="verDestinoLat"></span></div>
+          <div class="detail-row"><span class="detail-label">Longitud</span><span class="detail-value" id="verDestinoLng"></span></div>
+          <div class="detail-row"><span class="detail-label">Activo</span><span class="detail-value" id="verDestinoActivo"></span></div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

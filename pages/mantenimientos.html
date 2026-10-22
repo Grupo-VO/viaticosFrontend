@@ -1,0 +1,135 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-wrench me-2 page-title-icon"></i>Mantenimientos</h4>
+      <small class="text-muted">Registro de mantenimientos por vehiculo</small>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <div class="btn-group-export" id="exportMantenimientos">
+        <button class="btn btn-light btn-sm" id="btnExpMantXlsx" title="Exportar Excel"><i class="fas fa-file-excel icon-excel"></i></button>
+        <button class="btn btn-light btn-sm" id="btnExpMantPdf" title="Exportar PDF"><i class="fas fa-file-pdf icon-pdf"></i></button>
+      </div>
+      <button class="btn btn-green" id="btnNuevoMantenimiento">
+        <i class="fas fa-plus me-1"></i> Nuevo Mantenimiento
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 mb-3 flex-wrap">
+    <div class="table-search-bar flex-grow-1 mb-0 search-width">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" class="form-control" id="searchMantenimientos" placeholder="Buscar por placa, tipo, descripcion...">
+    </div>
+      <select class="form-select filter-width" id="filtroVehiculoMant">
+      <option value="">Todos los vehiculos</option>
+    </select>
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>Vehiculo</th>
+            <th>Tipo</th>
+            <th>Fecha</th>
+            <th>Descripcion</th>
+            <th>Costo</th>
+            <th>Odometro</th>
+            <th>Estado</th>
+            <th>Evidencia</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableMantenimientosBody">
+          <tr><td colspan="9"><div class="empty-state"><i class="fas fa-wrench"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear -->
+<div class="modal fade" id="mantenimientoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Nuevo Mantenimiento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formMantenimiento">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Vehiculo <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="mantVehiculo" required></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Tipo <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="mantTipo" required>
+                <option value="">Seleccionar...</option>
+                <option value="PREVENTIVO">Preventivo</option>
+                <option value="CORRECTIVO">Correctivo</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control form-green" id="mantFecha" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Costo <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="mantCosto" min="0" step="0.01" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Odometro (km) <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="mantOdometro" min="0" step="0.1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Evidencia (opcional)</label>
+              <input type="file" class="form-control form-green" id="mantEvidencia" accept="image/*,.pdf">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Descripcion <span class="text-danger">*</span></label>
+              <textarea class="form-control form-green" id="mantDescripcion" rows="3" required maxlength="500"></textarea>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarMantenimiento">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver -->
+<div class="modal fade" id="mantenimientoVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Detalle de Mantenimiento</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <div class="persona-foto-preview persona-foto-ver"><i class="fas fa-wrench"></i></div>
+          <h5 class="fw-bold mb-1" id="verMantVehiculo"></h5>
+          <span class="badge-status" id="verMantEstado"></span>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-row"><span class="detail-label">Tipo</span><span class="detail-value" id="verMantTipo"></span></div>
+          <div class="detail-row"><span class="detail-label">Fecha</span><span class="detail-value" id="verMantFecha"></span></div>
+          <div class="detail-row"><span class="detail-label">Descripcion</span><span class="detail-value" id="verMantDescripcion"></span></div>
+          <div class="detail-row"><span class="detail-label">Costo</span><span class="detail-value" id="verMantCosto"></span></div>
+          <div class="detail-row"><span class="detail-label">Odometro</span><span class="detail-value" id="verMantOdometro"></span></div>
+          <div class="detail-row"><span class="detail-label">Evidencia</span><span class="detail-value"><a href="#" id="verMantEvidenciaLink"><i class="fas fa-file-download me-1"></i>Descargar</a></span></div>
+          <div class="detail-row"><span class="detail-label">Fecha de Creacion</span><span class="detail-value" id="verMantFechaCreacion"></span></div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Grupo VO — Viaticos</title>
+  <link rel="icon" type="image/png" href="assets/imgs/icono.png">
+  <link href="assets/libs/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" rel="stylesheet">
+  <link href="css/main.css" rel="stylesheet">
+  <link href="css/login.css" rel="stylesheet">
+</head>
+<body>
+
+  <!-- ============================== ACCENT LINE ============================== -->
+  <div id="accent-line"></div>
+
+  <!-- ============================== LOGIN VIEW ============================== -->
+  <div id="login-view">
+    <div class="login-accent-line"></div>
+    <div class="login-logo-top">
+      <img src="assets/imgs/logo.png" alt="Grupo VO">
+    </div>
+    <div class="login-body">
+      <div class="login-card">
+        <div class="login-user-icon">
+          <i class="fas fa-user"></i>
+        </div>
+        <h2 class="login-title">Viaticos</h2>
+        <p class="login-subtitle">Grupo VO</p>
+
+        <form id="login-form" class="login-form" novalidate>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-user"></i></span>
+            <input type="text" class="form-control" id="username" placeholder="Usuario" required autocomplete="username">
+          </div>
+          <div class="input-group">
+            <span class="input-group-text"><i class="fas fa-lock"></i></span>
+            <input type="password" class="form-control" id="password" placeholder="Contrasena" required autocomplete="current-password">
+            <button class="btn-toggle-pw" type="button" id="toggle-password" tabindex="-1">
+              <i class="fas fa-eye" id="toggle-password-icon"></i>
+            </button>
+          </div>
+          <button type="submit" class="btn-entrar" id="btn-login">
+            <span id="btn-login-text">ENTRAR</span>
+            <span id="btn-login-loader" class="d-none">
+              <span class="spinner-border spinner-border-sm me-2" role="status"></span>
+              Ingresando...
+            </span>
+          </button>
+        </form>
+      </div>
+    </div>
+    <div class="login-footer">
+      <div class="login-footer-line"></div>
+      <div class="login-footer-content">
+        <img src="assets/imgs/logo.png" alt="Grupo VO" class="login-footer-logo">
+        <span class="login-footer-text">Copyright 2026 Grupo VO</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== DASHBOARD VIEW ============================== -->
+  <div id="dashboard-view" class="d-none">
+    <header id="topbar">
+      <div class="topbar-left">
+        <button class="topbar-toggle d-lg-none" id="sidebarToggle" type="button">
+          <i class="fas fa-bars"></i>
+        </button>
+      </div>
+      <div class="topbar-center">
+        <img src="assets/imgs/logo.png" alt="Grupo VO" class="topbar-logo">
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-topbar-icon" id="btn-reload" title="Recargar modulo actual">
+          <i class="fas fa-sync-alt"></i>
+        </button>
+        <div class="topbar-user-info">
+          <span class="topbar-greeting">Bienvenido,</span>
+          <span class="topbar-user fw-semibold" id="display-name">Usuario</span>
+        </div>
+        <div class="topbar-avatar" id="topbar-avatar">U</div>
+        <button class="btn-topbar-logout" id="btn-logout" title="Cerrar sesion">
+          <i class="fas fa-sign-out-alt"></i>
+        </button>
+      </div>
+    </header>
+
+    <aside id="sidebar">
+      <nav class="sidebar-nav" id="sidebar-nav">
+        <div class="sidebar-section-label">Operaciones</div>
+        <a href="#" class="sidebar-item active" data-view="pages/dashboard-home.html" data-module="home">
+          <i class="fas fa-home sidebar-item-icon"></i>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/viajes.html" data-module="viajes">
+          <i class="fas fa-route sidebar-item-icon"></i>
+          <span>Viajes</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/monitoreo.html" data-module="monitoreo">
+          <i class="fas fa-satellite-dish sidebar-item-icon"></i>
+          <span>Monitoreo</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/mi-viaje.html" data-module="mi-viaje" data-role="CHOFER">
+          <i class="fas fa-location-arrow sidebar-item-icon"></i>
+          <span>Mi viaje</span>
+        </a>
+        <div class="sidebar-section-label mt-3">Admin</div>
+        <a href="#" class="sidebar-item" data-view="pages/vehiculos.html" data-module="vehiculos">
+          <i class="fas fa-truck sidebar-item-icon"></i>
+          <span>Vehiculos</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/personas.html" data-module="personas">
+          <i class="fas fa-users sidebar-item-icon"></i>
+          <span>Personal</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/destinos.html" data-module="destinos">
+          <i class="fas fa-map-marker-alt sidebar-item-icon"></i>
+          <span>Destinos</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/rutas.html" data-module="rutas">
+          <i class="fas fa-road sidebar-item-icon"></i>
+          <span>Rutas</span>
+        </a>
+        <div class="sidebar-section-label mt-3">Mantenimiento</div>
+        <a href="#" class="sidebar-item" data-view="pages/combustible.html" data-module="combustible">
+          <i class="fas fa-gas-pump sidebar-item-icon"></i>
+          <span>Combustible</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/mantenimientos.html" data-module="mantenimientos">
+          <i class="fas fa-wrench sidebar-item-icon"></i>
+          <span>Mantenimientos</span>
+        </a>
+        <a href="#" class="sidebar-item" data-view="pages/incidentes.html" data-module="incidentes">
+          <i class="fas fa-exclamation-triangle sidebar-item-icon"></i>
+          <span>Incidentes</span>
+        </a>
+        <div class="sidebar-section-label mt-3">Sistema</div>
+        <a href="#" class="sidebar-item" data-view="pages/configuracion.html" data-module="configuracion">
+          <i class="fas fa-cog sidebar-item-icon"></i>
+          <span>Configuracion</span>
+        </a>
+      </nav>
+      <div class="sidebar-footer">
+        <small class="text-muted" id="sidebar-version">v1.0.0</small>
+      </div>
+    </aside>
+
+    <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+    <main id="main-content">
+      <div class="welcome-container">
+        <div class="welcome-card">
+          <img src="assets/imgs/logo.png" alt="Grupo VO" class="welcome-logo">
+          <h2 class="welcome-title">Viaticos Grupo VO</h2>
+          <p class="welcome-text">Selecciona un modulo en el menu lateral para comenzar</p>
+        </div>
+      </div>
+    </main>
+
+    <footer id="app-footer">
+      <div class="footer-line-green"></div>
+      <div class="footer-content">
+        <img src="assets/imgs/logo.png" alt="Grupo VO" class="footer-logo">
+        <span class="footer-copyright">Copyright 2026 Grupo VO</span>
+      </div>
+    </footer>
+  </div>
+
+  <!-- ============================== TOAST CONTAINER ============================== -->
+  <div id="toast-container"></div>
+
+  <!-- ============================== CONFIRM MODAL ============================== -->
+  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-sm">
+    <div class="modal-content border-0 shadow-lg confirm-modal-content">
+        <div class="modal-body text-center p-4">
+          <div class="confirm-icon mb-3">
+            <i class="fas fa-exclamation-triangle fa-3x text-warning"></i>
+          </div>
+          <h5 class="fw-semibold mb-2" id="confirmTitle">Estas seguro?</h5>
+          <p class="text-muted mb-0 small" id="confirmMsg">Esta accion no se puede deshacer.</p>
+        </div>
+        <div class="modal-footer border-0 justify-content-center pb-4 pt-0">
+          <button type="button" class="btn btn-light px-4 confirm-modal-button" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" class="btn btn-danger px-4 confirm-modal-button" id="confirmBtn">Eliminar</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="js/version.js"></script>
+  <script>
+    if (typeof PAYLOAD_VERSION !== 'undefined') {
+      document.querySelectorAll('link[rel="stylesheet"][href^="css/"]').forEach(function (l) {
+        l.href = l.href.split('?')[0] + '?v=' + PAYLOAD_VERSION;
+      });
+      document.querySelectorAll('script[src^="js/"]').forEach(function (s) {
+        if (s.src.indexOf('version.js') === -1) {
+          s.src = s.src.split('?')[0] + '?v=' + PAYLOAD_VERSION;
+        }
+      });
+    }
+  </script>
+  <script src="assets/libs/bootstrap/js/bootstrap.bundle.min.js"></script>
+  <script src="js/api.js"></script>
+  <script src="js/config.js"></script>
+  <script src="js/utils.js"></script>
+  <script src="js/dashboard.js"></script>
+  <script src="js/auth.js"></script>
+</body>
+</html>

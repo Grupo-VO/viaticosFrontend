@@ -1,0 +1,140 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-truck me-2 page-title-icon"></i>Vehiculos</h4>
+      <small class="text-muted">Gestion de la flota vehicular</small>
+    </div>
+    <button class="btn btn-green" id="btnNuevoVehiculo">
+      <i class="fas fa-plus me-1"></i> Nuevo Vehiculo
+    </button>
+  </div>
+
+  <div class="table-search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="form-control" id="searchVehiculos" placeholder="Buscar por placa, marca, modelo...">
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>Placa</th>
+            <th>Marca / Modelo</th>
+            <th>Kilometraje</th>
+            <th>Rendimiento</th>
+            <th>Pasajeros</th>
+            <th>Combustible</th>
+            <th>Status</th>
+            <th>Activo</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableVehiculosBody">
+          <tr><td colspan="9"><div class="empty-state"><i class="fas fa-truck"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="vehiculoModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="vehiculoModalTitle">Nuevo Vehiculo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formVehiculo">
+          <input type="hidden" id="vehiculoId">
+          <div class="row g-3">
+            <div class="col-md-4">
+              <label class="form-label">Marca <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="vehiculoMarca" required maxlength="80">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Modelo <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="vehiculoModelo" required maxlength="80">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Placa <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="vehiculoPlaca" required maxlength="20">
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Kilometraje <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="vehiculoKilometraje" min="0" step="0.1" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Rendimiento (km/l) <span class="text-danger">*</span></label>
+               <input type="number" class="form-control form-green" id="vehiculoRendimiento" min="0.1" step="0.1" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Limite Pasajeros <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="vehiculoLimitePasajeros" min="1" step="1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Capacidad Tanque (L) <span class="text-danger">*</span></label>
+               <input type="number" class="form-control form-green" id="vehiculoCapacidadTanque" min="0.1" step="0.1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Status <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="vehiculoStatus" required>
+                <option value="">Seleccionar...</option>
+                <option value="DISPONIBLE">Disponible</option>
+                <option value="EN_SERVICIO">En Servicio</option>
+                <option value="MANTENIMIENTO">Mantenimiento</option>
+                <option value="FUERA_SERVICIO">Fuera de Servicio</option>
+              </select>
+            </div>
+            <div class="col-12">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="vehiculoActivo" checked>
+                <label class="form-check-label" for="vehiculoActivo">Activo</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarVehiculo">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver -->
+<div class="modal fade" id="vehiculoVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Detalle de Vehiculo</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <div class="persona-foto-preview persona-foto-ver"><i class="fas fa-truck"></i></div>
+          <h5 class="fw-bold mb-1" id="verVehiculoTitulo"></h5>
+          <span class="badge-status" id="verVehiculoStatus"></span>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-row"><span class="detail-label">Placa</span><span class="detail-value" id="verVehiculoPlaca"></span></div>
+          <div class="detail-row"><span class="detail-label">Marca</span><span class="detail-value" id="verVehiculoMarca"></span></div>
+          <div class="detail-row"><span class="detail-label">Modelo</span><span class="detail-value" id="verVehiculoModelo"></span></div>
+          <div class="detail-row"><span class="detail-label">Kilometraje</span><span class="detail-value" id="verVehiculoKilometraje"></span></div>
+          <div class="detail-row"><span class="detail-label">Rendimiento</span><span class="detail-value" id="verVehiculoRendimiento"></span></div>
+          <div class="detail-row"><span class="detail-label">Limite Pasajeros</span><span class="detail-value" id="verVehiculoPasajeros"></span></div>
+          <div class="detail-row"><span class="detail-label">Capacidad Tanque</span><span class="detail-value" id="verVehiculoTanque"></span></div>
+          <div class="detail-row"><span class="detail-label">Nivel Combustible</span><span class="detail-value" id="verVehiculoCombustible"></span></div>
+          <div class="detail-row"><span class="detail-label">Activo</span><span class="detail-value" id="verVehiculoActivo"></span></div>
+          <div class="detail-row"><span class="detail-label">Fecha de Creacion</span><span class="detail-value" id="verVehiculoFecha"></span></div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

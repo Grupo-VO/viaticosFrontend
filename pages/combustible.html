@@ -1,0 +1,118 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-gas-pump me-2 page-title-icon"></i>Combustible</h4>
+      <small class="text-muted">Cargas de combustible por vehiculo</small>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <div class="btn-group-export" id="exportCombustible">
+        <button class="btn btn-light btn-sm" id="btnExpCombustibleXlsx" title="Exportar Excel"><i class="fas fa-file-excel icon-excel"></i></button>
+        <button class="btn btn-light btn-sm" id="btnExpCombustiblePdf" title="Exportar PDF"><i class="fas fa-file-pdf icon-pdf"></i></button>
+      </div>
+      <button class="btn btn-green" id="btnNuevaCarga">
+        <i class="fas fa-plus me-1"></i> Nueva Carga
+      </button>
+    </div>
+  </div>
+
+  <div class="d-flex gap-2 mb-3 flex-wrap">
+    <div class="table-search-bar flex-grow-1 mb-0 search-width">
+      <i class="fas fa-search search-icon"></i>
+      <input type="text" class="form-control" id="searchCargas" placeholder="Buscar por placa o vehiculo...">
+    </div>
+      <select class="form-select filter-width" id="filtroVehiculoCarga">
+      <option value="">Todos los vehiculos</option>
+    </select>
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>Vehiculo</th>
+            <th>Fecha</th>
+            <th>Litros</th>
+            <th>Costo Total</th>
+            <th>Odometro</th>
+            <th>Comprobante</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableCargasBody">
+          <tr><td colspan="7"><div class="empty-state"><i class="fas fa-gas-pump"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear -->
+<div class="modal fade" id="cargaModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Registrar Carga de Combustible</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formCarga">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Vehiculo <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="cargaVehiculo" required></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control form-green" id="cargaFecha" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Litros <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="cargaLitros" min="1" step="0.01" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Odometro (km) <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="cargaOdometro" min="0" step="0.1" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Comprobante (opcional)</label>
+              <input type="file" class="form-control form-green" id="cargaComprobante" accept="image/*,.pdf">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarCarga">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver -->
+<div class="modal fade" id="cargaVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Detalle de Carga</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <div class="persona-foto-preview persona-foto-ver"><i class="fas fa-gas-pump"></i></div>
+          <h5 class="fw-bold mb-1" id="verCargaVehiculo"></h5>
+        </div>
+        <div class="detail-grid">
+          <div class="detail-row"><span class="detail-label">Fecha</span><span class="detail-value" id="verCargaFecha"></span></div>
+          <div class="detail-row"><span class="detail-label">Litros</span><span class="detail-value" id="verCargaLitros"></span></div>
+          <div class="detail-row"><span class="detail-label">Costo Total</span><span class="detail-value" id="verCargaCosto"></span></div>
+          <div class="detail-row"><span class="detail-label">Odometro</span><span class="detail-value" id="verCargaOdometro"></span></div>
+          <div class="detail-row"><span class="detail-label">Comprobante</span><span class="detail-value"><a href="#" id="verComprobanteLink"><i class="fas fa-file-download me-1"></i>Descargar</a></span></div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

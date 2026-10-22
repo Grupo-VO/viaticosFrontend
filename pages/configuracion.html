@@ -1,0 +1,70 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-cog me-2 page-title-icon"></i>Configuracion</h4>
+      <small class="text-muted">Parametros clave-valor del sistema</small>
+    </div>
+    <button class="btn btn-green" id="btnNuevaConfig">
+      <i class="fas fa-plus me-1"></i> Nueva Configuracion
+    </button>
+  </div>
+
+  <div class="table-search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="form-control" id="searchConfigs" placeholder="Buscar por clave, valor, descripcion...">
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>Clave</th>
+            <th>Valor</th>
+            <th>Descripcion</th>
+            <th>Fecha de Creacion</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableConfigsBody">
+          <tr><td colspan="5"><div class="empty-state"><i class="fas fa-cog"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="configModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="configModalTitle">Nueva Configuracion</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formConfig">
+          <input type="hidden" id="configId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Clave <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="configClave" required maxlength="120">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Valor <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="configValor" required maxlength="255">
+            </div>
+            <div class="col-12">
+              <label class="form-label">Descripcion</label>
+              <input type="text" class="form-control form-green" id="configDescripcion" maxlength="255">
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarConfig">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>

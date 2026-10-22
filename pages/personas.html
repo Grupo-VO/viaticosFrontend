@@ -1,0 +1,135 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-users me-2 page-title-icon"></i>Personas</h4>
+      <small class="text-muted">Gestion de usuarios del sistema</small>
+    </div>
+    <button class="btn btn-persona-nueva" id="btnNuevaPersona">
+      <i class="fas fa-plus me-1"></i> Nueva Persona
+    </button>
+  </div>
+
+  <div class="table-search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="form-control" id="searchPersonas" placeholder="Buscar por nombre, usuario, rol...">
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th class="th-foto">Foto</th>
+            <th>Nombre</th>
+            <th>Username</th>
+            <th>Rol</th>
+            <th>Estado</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tablePersonasBody">
+          <tr><td colspan="6"><div class="empty-state"><i class="fas fa-users"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="personaModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="personaModalTitle">Nueva Persona</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <div class="persona-foto-preview" id="fotoPreview">
+            <i class="fas fa-user"></i>
+          </div>
+          <label class="persona-foto-label" for="fotoInput">
+            <i class="fas fa-camera me-1"></i> Seleccionar foto
+          </label>
+          <input type="file" id="fotoInput" accept="image/*" class="d-none">
+        </div>
+        <form id="formPersona">
+          <input type="hidden" id="personaId">
+          <div class="row g-3">
+            <div class="col-12">
+              <label class="form-label">Nombre <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="personaNombre" required maxlength="100">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Apellido Paterno <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="personaApellidoP" required maxlength="100">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Apellido Materno <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="personaApellidoM" required maxlength="100">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Username <span class="text-danger">*</span></label>
+              <input type="text" class="form-control form-green" id="personaUsername" required maxlength="50">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label" id="labelPassword">Password <span class="text-danger">*</span></label>
+              <input type="password" class="form-control form-green" id="personaPassword" maxlength="100">
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Rol <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="personaRol" required>
+                <option value="">Seleccionar...</option>
+                <option value="ADMINISTRADOR">Administrador</option>
+                <option value="CHOFER">Chofer</option>
+                <option value="USUARIO_AUTORIZADO">Usuario Autorizado</option>
+                <option value="AUDITORIA">Auditoria</option>
+              </select>
+            </div>
+            <div class="col-md-6 d-flex align-items-end">
+              <div class="form-check">
+                <input type="checkbox" class="form-check-input" id="personaActiva" checked>
+                <label class="form-check-label" for="personaActiva">Activa</label>
+              </div>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-persona-guardar px-4" id="btnGuardarPersona">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver Persona -->
+<div class="modal fade" id="personaVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Detalle de Persona</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="text-center mb-3">
+          <div class="persona-foto-preview persona-foto-ver" id="fotoVerPreview">
+            <i class="fas fa-user"></i>
+          </div>
+          <h5 class="fw-bold mb-0" id="verNombre"></h5>
+          <span class="badge-status" id="verEstado"></span>
+        </div>
+        <div class="ver-detalle">
+          <div class="ver-row"><span class="ver-label">Apellido Paterno</span><span class="ver-valor" id="verApellidoP"></span></div>
+          <div class="ver-row"><span class="ver-label">Apellido Materno</span><span class="ver-valor" id="verApellidoM"></span></div>
+          <div class="ver-row"><span class="ver-label">Username</span><span class="ver-valor" id="verUsername"></span></div>
+          <div class="ver-row"><span class="ver-label">Rol</span><span class="ver-valor" id="verRol"></span></div>
+          <div class="ver-row"><span class="ver-label">Fecha de Creacion</span><span class="ver-valor" id="verFecha"></span></div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

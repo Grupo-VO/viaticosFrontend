@@ -1,0 +1,190 @@
+<div class="page-content">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-route me-2 page-title-icon"></i>Viajes</h4>
+      <small class="text-muted">Gestion de viajes y viaticos</small>
+    </div>
+    <div class="d-flex gap-2 flex-wrap">
+      <div class="btn-group-export" id="exportViajes">
+        <button class="btn btn-light btn-sm" id="btnExpViajesXlsx" title="Exportar Excel"><i class="fas fa-file-excel icon-excel"></i></button>
+        <button class="btn btn-light btn-sm" id="btnExpViajesPdf" title="Exportar PDF"><i class="fas fa-file-pdf icon-pdf"></i></button>
+      </div>
+      <button class="btn btn-green" id="btnNuevoViaje">
+        <i class="fas fa-plus me-1"></i> Nuevo Viaje
+      </button>
+    </div>
+  </div>
+
+  <div class="table-search-bar">
+    <i class="fas fa-search search-icon"></i>
+    <input type="text" class="form-control" id="searchViajes" placeholder="Buscar por placa, chofer, destino, estado...">
+  </div>
+
+  <div class="panel-card overflow-hidden">
+    <div class="table-responsive">
+      <table class="table table-custom mb-0">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Ruta</th>
+            <th>Vehiculo</th>
+            <th>Chofer</th>
+            <th>Pasajeros</th>
+            <th>Salida</th>
+            <th>Regreso</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th class="th-acciones">Acciones</th>
+          </tr>
+        </thead>
+        <tbody id="tableViajesBody">
+          <tr><td colspan="10"><div class="empty-state"><i class="fas fa-route"></i><p>Cargando...</p></div></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Crear/Editar -->
+<div class="modal fade" id="viajeModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-lg">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="viajeModalTitle">Nuevo Viaje</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formViaje">
+          <input type="hidden" id="viajeId">
+          <div class="row g-3">
+            <div class="col-md-6">
+              <label class="form-label">Vehiculo <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="viajeVehiculo" required></select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Chofer <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="viajeChofer" required></select>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Numero de Pasajeros <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="viajePasajeros" min="1" step="1" required>
+            </div>
+            <div class="col-md-4">
+              <label class="form-label">Tipo Trayecto <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="viajeTipoTrayecto" required>
+                <option value="CASETAS">Casetas</option>
+                <option value="LIBRE">Libre</option>
+              </select>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha Salida <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control form-green" id="viajeFechaSalida" required>
+            </div>
+            <div class="col-md-6">
+              <label class="form-label">Fecha Regreso <span class="text-danger">*</span></label>
+              <input type="datetime-local" class="form-control form-green" id="viajeFechaRegreso" required>
+            </div>
+            <div class="col-12">
+              <label class="form-label">Tipo de Ruta <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="viajeTipoRuta" required>
+                 <option value="GUARDADA">Ruta predefinida (redonda)</option>
+                 <option value="PERSONALIZADA">Ruta personalizada (uso unico, multi-destino)</option>
+              </select>
+            </div>
+            <div class="col-12 d-none" id="viajeRutaGuardadaWrap">
+              <label class="form-label">Ruta <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="viajeRutaGuardada"></select>
+            </div>
+            <div class="col-12" id="viajeRutaPersonalizadaWrap">
+               <label class="form-label">Sucursal de salida y regreso <span class="text-danger">*</span></label>
+              <select class="form-select form-green" id="viajeOrigen" required></select>
+            </div>
+            <div class="col-12" id="viajeDestinosWrap">
+              <div class="d-flex justify-content-between align-items-center mb-1">
+                 <label class="form-label mb-0">Destinos de la ruta especial <span class="text-danger">*</span></label>
+                 <button type="button" class="btn btn-sm btn-light" id="btnAgregarDestino"><i class="fas fa-plus me-1"></i>Agregar destino</button>
+              </div>
+              <div id="destinosContainer"></div>
+            </div>
+             <div class="col-12 d-none" id="viajeOptimizarWrap">
+               <div class="form-check">
+                 <input type="checkbox" class="form-check-input" id="viajeOptimizar">
+                 <label class="form-check-label" for="viajeOptimizar">Optimizar orden de destinos con Google Maps</label>
+               </div>
+             </div>
+             <div class="col-md-6">
+               <label class="form-label">Costo Comida por pasajero <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="viajeCostoComida" min="0" step="0.01" required>
+            </div>
+            <div class="col-md-6">
+               <label class="form-label">Costo Hospedaje por pasajero <span class="text-danger">*</span></label>
+              <input type="number" class="form-control form-green" id="viajeCostoHospedaje" min="0" step="0.01" required>
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-green px-4" id="btnGuardarViaje">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Modal Ver / Resumen -->
+<div class="modal fade" id="viajeVerModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered modal-xl">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold" id="verViajeTitulo">Detalle de Viaje</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <div class="row g-3">
+          <div class="col-lg-5">
+            <div class="detail-grid mb-3">
+              <div class="detail-row"><span class="detail-label">Status</span><span class="detail-value" id="verViajeStatus"></span></div>
+              <div class="detail-row"><span class="detail-label">Vehiculo</span><span class="detail-value" id="verViajeVehiculo"></span></div>
+              <div class="detail-row"><span class="detail-label">Chofer</span><span class="detail-value" id="verViajeChofer"></span></div>
+              <div class="detail-row"><span class="detail-label">Pasajeros</span><span class="detail-value" id="verViajePasajeros"></span></div>
+              <div class="detail-row"><span class="detail-label">Salida</span><span class="detail-value" id="verViajeSalida"></span></div>
+              <div class="detail-row"><span class="detail-label">Regreso</span><span class="detail-value" id="verViajeRegreso"></span></div>
+              <div class="detail-row"><span class="detail-label">Distancia</span><span class="detail-value" id="verViajeDistancia"></span></div>
+              <div class="detail-row"><span class="detail-label">Duracion</span><span class="detail-value" id="verViajeDuracion"></span></div>
+              <div class="detail-row"><span class="detail-label">Trayecto</span><span class="detail-value" id="verViajeTrayecto"></span></div>
+              <div class="detail-row"><span class="detail-label">Combustible</span><span class="detail-value" id="verViajeCombustible"></span></div>
+            </div>
+            <div class="totales-box">
+              <div class="totales-row"><span>Costo Comida</span><span id="verTotComida"></span></div>
+              <div class="totales-row"><span>Costo Hospedaje</span><span id="verTotHospedaje"></span></div>
+              <div class="totales-row"><span>Casetas (<span id="verTotCasetasCount"></span>)</span><span id="verTotCasetas"></span></div>
+              <div class="totales-row"><span>Combustible</span><span id="verTotCombustible"></span></div>
+              <div class="totales-row total"><span>Total Viaje</span><span id="verTotViaje"></span></div>
+            </div>
+          </div>
+          <div class="col-lg-7">
+            <div class="modal-section-title">Destinos</div>
+            <div class="panel-card overflow-hidden mb-3">
+              <table class="table table-custom mb-0">
+                <thead><tr><th>#</th><th>Nombre</th><th>Estado</th><th>Llegada</th></tr></thead>
+                <tbody id="verViajeDestinosBody"></tbody>
+              </table>
+            </div>
+            <div class="modal-section-title">Casetas</div>
+            <div class="panel-card overflow-hidden mb-3">
+              <table class="table table-custom mb-0">
+                <thead><tr><th>#</th><th>Nombre</th><th>Costo</th></tr></thead>
+                <tbody id="verViajeCasetasBody"></tbody>
+              </table>
+            </div>
+            <div class="modal-section-title">Mapa</div>
+            <div class="map-container" id="viajeMap"><div class="map-placeholder"><i class="fas fa-map"></i><span>Cargando mapa...</span></div></div>
+          </div>
+        </div>
+      </div>
+      <div class="modal-footer border-0 justify-content-center">
+        <button type="button" class="btn btn-light px-4" data-bs-dismiss="modal">Cerrar</button>
+      </div>
+    </div>
+  </div>
+</div>

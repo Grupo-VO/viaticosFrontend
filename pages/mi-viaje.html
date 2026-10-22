@@ -1,0 +1,111 @@
+<div class="page-content mi-viaje-page">
+  <div class="page-header">
+    <div>
+      <h4><i class="fas fa-location-arrow me-2 page-title-icon"></i>Mi viaje</h4>
+      <small class="text-muted">Consulta tu ruta y comparte tu ubicacion</small>
+    </div>
+    <span class="monitoreo-live" id="miViajeGpsStatus"><span class="live-dot"></span> GPS detenido</span>
+  </div>
+
+  <div id="miViajeEmpty" class="empty-state d-none">
+    <i class="fas fa-route"></i>
+    <h5>No tienes un viaje activo</h5>
+    <p>Cuando el administrador inicie tu viaje, aparecerá aquí.</p>
+  </div>
+
+  <div id="miViajeContent" class="d-none">
+    <div class="row g-3">
+      <div class="col-lg-4">
+        <div class="panel-card p-3 h-100">
+          <div class="d-flex justify-content-between align-items-start mb-3">
+            <div>
+              <small class="text-muted">Viaje activo</small>
+              <h5 class="fw-bold mb-0" id="miViajeTitulo">-</h5>
+            </div>
+            <span id="miViajeStatus"></span>
+          </div>
+          <div class="detail-grid">
+            <div class="detail-row"><span class="detail-label">Vehiculo</span><span class="detail-value" id="miViajeVehiculo"></span></div>
+            <div class="detail-row"><span class="detail-label">Salida</span><span class="detail-value" id="miViajeSalida"></span></div>
+            <div class="detail-row"><span class="detail-label">Distancia</span><span class="detail-value" id="miViajeDistancia"></span></div>
+            <div class="detail-row"><span class="detail-label">Combustible</span><span class="detail-value" id="miViajeCombustible"></span></div>
+            <div class="detail-row"><span class="detail-label">Ultima ubicacion</span><span class="detail-value" id="miViajeUltimaUbicacion">Sin enviar</span></div>
+          </div>
+          <div class="modal-section-title mt-3">Destinos</div>
+          <div class="panel-card overflow-hidden">
+            <table class="table table-custom mb-0">
+              <thead><tr><th>#</th><th>Destino</th><th>Estado</th></tr></thead>
+              <tbody id="miViajeDestinosBody"></tbody>
+            </table>
+          </div>
+           <div class="alert alert-info small mt-3 mb-0" id="miViajeGpsMessage">
+             Permite el acceso a tu ubicacion para actualizar el monitoreo.
+           </div>
+           <button type="button" class="btn btn-primary w-100 mt-3" id="btnMiViajeNavegar">
+             <i class="fas fa-directions me-2"></i>Iniciar navegación al siguiente destino
+           </button>
+           <button type="button" class="btn btn-danger w-100 mt-3" id="btnMiViajeIncidente">
+            <i class="fas fa-exclamation-triangle me-2"></i>Reportar incidente
+          </button>
+        </div>
+      </div>
+       <div class="col-lg-8">
+         <div class="panel-card p-2">
+          <div class="map-container map-lg" id="miViajeMap">
+            <div class="map-placeholder"><i class="fas fa-map"></i><span>Cargando mapa...</span></div>
+           </div>
+           <div class="panel-card mt-2 p-3 d-none" id="miViajeDirectionsWrap">
+             <div class="fw-semibold mb-2"><i class="fas fa-turn-up me-2"></i>Indicaciones</div>
+             <div id="miViajeDirectionsPanel" class="small"></div>
+           </div>
+         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="modal fade" id="miViajeIncidenteModal" tabindex="-1">
+  <div class="modal-dialog modal-dialog-centered">
+    <div class="modal-content border-0 shadow">
+      <div class="modal-header border-0">
+        <h5 class="modal-title fw-bold">Reportar incidente</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+      </div>
+      <div class="modal-body">
+        <form id="miViajeIncidenteForm">
+          <div class="mb-3">
+            <label class="form-label">Tipo <span class="text-danger">*</span></label>
+            <select class="form-select form-green" id="miViajeIncidenteTipo" required>
+              <option value="">Seleccionar...</option>
+              <option value="FALLA">Falla mecanica</option>
+              <option value="ACCIDENTE">Accidente</option>
+              <option value="MULTA">Multa</option>
+              <option value="DETALLE">Otro detalle</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Severidad <span class="text-danger">*</span></label>
+            <select class="form-select form-green" id="miViajeIncidenteSeveridad" required>
+              <option value="MEDIA">Media</option>
+              <option value="BAJA">Baja</option>
+              <option value="ALTA">Alta</option>
+              <option value="CRITICA">Critica</option>
+            </select>
+          </div>
+          <div class="mb-3">
+            <label class="form-label">Descripcion <span class="text-danger">*</span></label>
+            <textarea class="form-control form-green" id="miViajeIncidenteDescripcion" rows="4" maxlength="1000" required></textarea>
+          </div>
+          <div>
+            <label class="form-label">Evidencia (opcional)</label>
+            <input type="file" class="form-control form-green" id="miViajeIncidenteEvidencia" accept="image/*,.pdf">
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer border-0">
+        <button type="button" class="btn btn-light" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" class="btn btn-danger" id="btnEnviarMiViajeIncidente">Enviar reporte</button>
+      </div>
+    </div>
+  </div>
+</div>
