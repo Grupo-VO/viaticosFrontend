@@ -1,6 +1,6 @@
 const API = (() => {
   // Keep the API on the same local hostname as the page so SameSite cookies work.
-  const esProduccion = window.location.hostname === 'viaticos.grupovo.com.mx';
+  const esProduccion = window.location.hostname === 'viaticos.smarttech.icu';
   const API_HOST = window.location.hostname === '127.0.0.1' ? '127.0.0.1' : 'localhost';
   const BASE_URL = esProduccion
     ? `${window.location.origin}/api/v1`
