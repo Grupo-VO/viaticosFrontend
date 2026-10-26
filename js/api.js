@@ -6,6 +6,7 @@ const API = (() => {
     ? `${window.location.origin}/api/v1`
     : `http://${API_HOST}:8099/api/v1`;
   let csrfToken = null;
+  let csrfPromise = null;
   let session = null;
   let refreshPromise = null;
 
@@ -13,15 +14,43 @@ const API = (() => {
   const esMutacion = (method) => !['GET', 'HEAD', 'OPTIONS'].includes(method);
 
   async function cargarCsrf() {
-    const res = await fetch(`${BASE_URL}/auth/csrf`, { credentials: 'include' });
-    if (!res.ok) throw new Error('No se pudo inicializar la protección CSRF');
-    const data = await res.json();
-    csrfToken = data.token;
-    return csrfToken;
+    if (csrfPromise) return csrfPromise;
+
+    csrfPromise = fetch(`${BASE_URL}/auth/csrf`, {
+      credentials: 'include',
+      cache: 'no-store',
+    })
+      .then(res => {
+        if (!res.ok) throw new Error('No se pudo inicializar la protección CSRF');
+        return res.json();
+      })
+      .then(data => {
+        csrfToken = data.token;
+        return csrfToken;
+      })
+      .finally(() => {
+        csrfPromise = null;
+      });
+
+    return csrfPromise;
+  }
+
+  function leerCookie(nombre) {
+    const prefijo = `${nombre}=`;
+    const cookie = document.cookie
+      .split('; ')
+      .find(item => item.startsWith(prefijo));
+    return cookie ? decodeURIComponent(cookie.substring(prefijo.length)) : null;
   }
 
   async function asegurarCsrf() {
-    if (!csrfToken) await cargarCsrf();
+    let cookieToken = leerCookie('XSRF-TOKEN');
+    if (!cookieToken) {
+      await cargarCsrf();
+      cookieToken = leerCookie('XSRF-TOKEN');
+    }
+    if (cookieToken) csrfToken = cookieToken;
+    return csrfToken;
   }
 
   function limpiarSesion() {
@@ -41,7 +70,7 @@ const API = (() => {
           const res = await fetch(`${BASE_URL}/auth/refresh-token`, {
             method: 'POST',
             credentials: 'include',
-            headers: { 'X-XSRF-TOKEN': csrfToken },
+            headers: { 'X-XSRF-TOKEN': leerCookie('XSRF-TOKEN') || csrfToken },
           });
           if (!res.ok) throw new Error('Sesion expirada');
           const data = await res.json();
@@ -65,7 +94,7 @@ const API = (() => {
       await fetch(`${BASE_URL}/auth/logout`, {
         method: 'POST',
         credentials: 'include',
-        headers: { 'X-XSRF-TOKEN': csrfToken },
+        headers: { 'X-XSRF-TOKEN': leerCookie('XSRF-TOKEN') || csrfToken },
       });
     } catch (_) {
       // La sesión local se limpia aunque el servidor ya no esté disponible.
@@ -80,7 +109,7 @@ const API = (() => {
     const headers = { 'Content-Type': 'application/json', ...options.headers };
     if (esMutacion(method) && !/\/auth\/login$/.test(url)) {
       await asegurarCsrf();
-      headers['X-XSRF-TOKEN'] = csrfToken;
+      headers['X-XSRF-TOKEN'] = leerCookie('XSRF-TOKEN') || csrfToken;
     }
 
     const res = await fetch(fullUrl, { ...options, credentials: 'include', headers });
@@ -123,7 +152,7 @@ const API = (() => {
     const res = await fetch(fullUrl, {
       method: 'POST',
       credentials: 'include',
-      headers: { 'X-XSRF-TOKEN': csrfToken },
+      headers: { 'X-XSRF-TOKEN': leerCookie('XSRF-TOKEN') || csrfToken },
       body: formData,
     });
     if (res.status === 401 && retry) {
